@@ -7,8 +7,15 @@ GameScene::GameScene() {}
 GameScene::~GameScene() { 
 	//3Dモデルの解放
 	delete model_;
+	delete modelBlock_;
 	//自キャラの解放
 	delete player_;
+
+	for (WorldTransform* worldTransformBlock : worldTransformBlocks_) {
+		delete worldTransformBlock;
+	}
+	worldTransformBlocks_.clear();
+
 }
 
 void GameScene::Initialize() {
@@ -21,6 +28,7 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("uvChecker.png");
 	//3Dモデルデータの生成
 	model_ = Model::Create();
+	modelBlock_ = Model::Create();
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	//自キャラの生成
@@ -32,6 +40,15 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	//自キャラの更新
 	player_->Update();
+	
+	//ブロックの更新
+	//for (WorldTransform* worldTransformBlock : worldTransformBlocks_) {
+	////アフィン変換
+	//	//worldTransformBlock->matWorld_=アフィン
+	//	//変数バッファに転送
+	//	worldTransformBlock->TransferMatrix();
+	//}
+
 }
 
 void GameScene::Draw() {

@@ -4,13 +4,18 @@
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() {
+	delete modelSphere_;
+}
 
 void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+
+	//3Dモデル
+	modelSphere_ = Model::CreateFromOBJ("sphere", true);
 }
 
 void GameScene::Update() {}

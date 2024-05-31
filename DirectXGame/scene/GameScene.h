@@ -7,6 +7,7 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include"Sphere.h"
 
 /// <summary>
 /// ゲームシーン
@@ -43,6 +44,8 @@ private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
+	Sphere* sphere_ = nullptr;
+	Model* modelSphere_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用

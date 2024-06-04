@@ -14,10 +14,8 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	skydome_ = new Skydome();
 	skydome_->Initialize();
 	//3Dモデル
-	modelSkydome_ = Model::CreateFromOBJ("sphere", true);
 }
 
 void GameScene::Update() { 
@@ -49,7 +47,6 @@ void GameScene::Draw() {
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
-	skydome_->Draw(model,viewProjection);
 	/// </summary>
 
 	// 3Dオブジェクト描画後処理

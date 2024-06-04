@@ -5,7 +5,6 @@
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
-	delete modelSkydome_;
 }
 
 void GameScene::Initialize() {
@@ -14,12 +13,10 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	skydome_->Initialize();
 	//3Dモデル
 }
 
 void GameScene::Update() { 
-	skydome_->Update();
 }
 
 void GameScene::Draw() {

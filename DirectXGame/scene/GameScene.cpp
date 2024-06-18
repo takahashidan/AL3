@@ -26,7 +26,9 @@ void GameScene::Initialize() {
 	//自キャラの生成
 	player_ = new Player();
 	//自キャラの初期化
-	player_->Initialize(model_,textureHandle_,&viewProjection_);
+	Vector3 plyerPosition = mapChipField_->GetMapChipPositionByIndex(x, y);
+	player_->Initialize(model_,&viewProjection_,playerPosition_);
+
 }
 
 void GameScene::Update() {

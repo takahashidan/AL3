@@ -3,12 +3,11 @@
 #include "Audio.h"
 #include "DirectXCommon.h"
 #include "Input.h"
+#include "MapChipFiled.h"
 #include "Model.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include"Player.h"
-#include<vector>
 
 /// <summary>
 /// ゲームシーン
@@ -41,22 +40,23 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	void GenerateBlocks();
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
-
-	//テクスチャハンドル
-	uint32_t textureHandle_ = 0;
-	//3Dモデル
-	Model* model_ = nullptr;
 	Model* modelBlock_ = nullptr;
-	//ビュープロジェクション
-	ViewProjection viewProjection_;
-	//自キャラ
-	Player* player_ = nullptr;
+	Model* modelSkydome_ = nullptr;
+	MapChipField* mapChipField_;
 
-	std::vector<WorldTransform*> worldTransformBlocks_;
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
+	WorldTransform wolrldTransform_;
+	ViewProjection viewProjection_;
+
+	Matrix4x4 ViewProjection_;
+	uint32_t numBlockVirtical_;
+	uint32_t numBlockHorizontal_;
 
 	/// <summary>
 	/// ゲームシーン用

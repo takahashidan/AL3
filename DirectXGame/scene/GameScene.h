@@ -10,7 +10,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include <vector>
-#include"Skydome.h"
+#include"skydome.h"
 /// <summary>
 /// ゲームシーン
 /// </summary>

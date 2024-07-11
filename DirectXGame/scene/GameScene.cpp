@@ -39,8 +39,10 @@ void GameScene::Initialize() {
 
 	// 自キャラの生成
 	player_ = new Player();
+	skydome_ = new Skydome();
 	// 自キャラの初期化
 	player_->Initialize(model_, textureHandle_, &viewProjection_);
+	skydome_->Initialize(model_, &viewProjection_);
 
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
@@ -68,7 +70,6 @@ void GameScene::Initialize() {
 			}
 		}
 	}
-
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
 }
@@ -99,6 +100,7 @@ void GameScene::Update() {
 
 	// 自キャラの更新
 	player_->Update();
+	skydome_->Update();
 
 	// 縦横ブロック更新
 	for (std::vector<WorldTransform*> worldTransformBlockTate : worldTransformBlocks_) {
@@ -142,7 +144,9 @@ void GameScene::Draw() {
 	//	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	// 自キャラの描画
 	//	player_->Draw();
-
+	skydome_->Draw();
+	modelSkydome_->Draw(worldTransform_, viewProjection_);
+	model_->Draw(worldTransform_, viewProjection_);
 	// 縦横ブロック描画
 	for (std::vector<WorldTransform*> worldTransformBlockTate : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlockYoko : worldTransformBlockTate) {

@@ -63,6 +63,7 @@ private: // メンバ変数
 
 	// 自キャラ
 	Player* player_ = nullptr;
+	Skydome* skydome_ = nullptr;
 
 	// 縦横ブロック配列
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;

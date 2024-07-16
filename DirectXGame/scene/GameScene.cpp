@@ -18,6 +18,7 @@ GameScene::~GameScene() {
 
 	delete debugCamera_;
 	delete modelSkydome_;
+	delete mapChipField_;
 }
 
 void GameScene::Initialize() {
@@ -27,10 +28,10 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	// ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("cube./cube.jpg");
+	textureHandle_ = TextureManager::Load("uvChecker.png");
 	// 3Dモデルの生成
 	model_ = Model::Create();
-	modelBlock_ = Model::Create();
+	modelBlock_ = Model::CreateFromOBJ("block",true);
 	modelSkydome_ = Model::CreateFromOBJ("sphere", true);
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
@@ -43,6 +44,9 @@ void GameScene::Initialize() {
 	// 自キャラの初期化
 	player_->Initialize(model_, textureHandle_, &viewProjection_);
 	skydome_->Initialize(model_, &viewProjection_);
+
+	mapChipField_ = new MapChipField;
+	mapChipField_->LoadMapChipCsv("Resources/map.csv");
 
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
@@ -72,6 +76,7 @@ void GameScene::Initialize() {
 	}
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
+
 }
 
 void GameScene::Update() {

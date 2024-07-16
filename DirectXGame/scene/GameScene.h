@@ -11,7 +11,8 @@
 #include "WorldTransform.h"
 #include <vector>
 #include"skydome.h"
-/// <summary>
+#include"MapChipField.h"
+    /// <summary>
 /// ゲームシーン
 /// </summary>
 class GameScene {
@@ -61,6 +62,8 @@ private: // メンバ変数
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 
+	MapChipField* mapChipField_;
+
 	// 自キャラ
 	Player* player_ = nullptr;
 	Skydome* skydome_ = nullptr;
@@ -72,4 +75,6 @@ private: // メンバ変数
 	bool isDebugCameraActive_ = false;
 	// デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
+
+	void GenerateBlocks();
 };

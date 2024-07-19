@@ -72,9 +72,6 @@
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
-    <ClCompile Include="MapChipFiled.cpp">
-      <Filter>ソース ファイル\scene</Filter>
-    </ClCompile>
     <ClCompile Include="myMath.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
@@ -86,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="skydome .cpp">
       <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="MapChipField.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -176,7 +176,7 @@
     <ClInclude Include="Player.h">
       <Filter>ソース ファイル\ヘッダー ファイル\scene</Filter>
     </ClInclude>
-    <ClInclude Include="MapChipFiled.h">
+    <ClInclude Include="MapChipField.h">
       <Filter>ソース ファイル\ヘッダー ファイル\3d</Filter>
     </ClInclude>
     <ClInclude Include="3d\SpotLight.h">

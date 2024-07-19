@@ -1,6 +1,7 @@
-#include<stdint.h>
-#include<vector>
-#include"Vector3.h"
+#include "Vector3.h"
+#include <stdint.h>
+#include <string>
+#include <vector>
 
 // 伝統的な列挙と比べてenum classには次の利点があります。
 // enum classの列挙値は暗黙的に整数型に変換されず、
@@ -11,7 +12,6 @@ enum class MapChipType {
 	kBlank, // 空白
 	kBlock, // ブロック
 };
-
 
 struct MapChipData {
 	std::vector<std::vector<MapChipType>> data;
@@ -29,7 +29,7 @@ public:
 	uint32_t GetNumBlockVirtical();
 	uint32_t GetNumBlockHorizontal();
 
-	private:
+private:
 	// 1ブロックのサイズ
 	static inline const float kBlockWidth = 2.0f;
 	static inline const float kBlockHeight = 2.0f;
@@ -39,4 +39,3 @@ public:
 
 	MapChipData mapChipData_;
 };
-

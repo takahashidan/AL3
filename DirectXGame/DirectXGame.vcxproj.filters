@@ -188,6 +188,9 @@
     <ClInclude Include="skydome.h">
       <Filter>ソース ファイル\ヘッダー ファイル\scene</Filter>
     </ClInclude>
+    <ClInclude Include="Easing.h">
+      <Filter>ソース ファイル\ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\SpritePS.hlsl">

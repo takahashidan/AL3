@@ -1,19 +1,36 @@
+﻿#pragma once
 #include "Model.h"
 #include "WorldTransform.h"
-#include "Viewprojection.h"
 
-class Skydome{
+
+class Skydome 
+{
 public:
-	void Initialize(); 
 
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize(Model* model, ViewProjection* viewProjection);
+	
+	Skydome();
+
+	~Skydome();
+
+	/// <summary>
+	/// 毎フレーム処理
+	/// </summary>
 	void Update();
 
+	/// <summary>
+	/// 描画
+	/// </summary>
 	void Draw();
 
-private:
-	// ワールド変換データ
+	private:
 	WorldTransform worldTransform_;
-	ViewProjection viewProjection_;
-	// モデル
+	ViewProjection* viewProjection_;
+	
+
 	Model* model_ = nullptr;
+	
 };

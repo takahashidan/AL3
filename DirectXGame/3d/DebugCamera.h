@@ -43,7 +43,7 @@ private:
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 	// 回転行列
-	Matrix4x4 matRot_;
+	Matrix4x4Function matRot_;
 
 	/// <summary>
 	/// 行列更新

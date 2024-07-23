@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Matrix4x4.h"
+#include "Matrix4x4Function.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -15,16 +15,14 @@
 class Sprite {
 public:
 	enum class BlendMode {
-		kNone,      //!< ブレンドなし
-		kNormal,    //!< 通常αブレンド。デフォルト。 Src * SrcA + Dest * (1 - SrcA)
-		kAdd,       //!< 加算。Src * SrcA + Dest * 1
-		kSubtract,  //!< 減算。Dest * 1 - Src * SrcA
-		kMultiply,  //!< 乗算。Src * 0 + Dest * Src
-		kScreen,    //!< スクリーン。Src * (1 - Dest) + Dest * 1
-		kExclusion, //!< 除外。(1 - Dest) * Src + (1 - Src) * Dest
+		kNone,     //!< ブレンドなし
+		kNormal,   //!< 通常αブレンド。デフォルト。 Src * SrcA + Dest * (1 - SrcA)
+		kAdd,      //!< 加算。Src * SrcA + Dest * 1
+		kSubtract, //!< 減算。Dest * 1 - Src * SrcA
+		kMultily,  //!< 乗算。Src * 0 + Dest * Src
+		kScreen,   //!< スクリーン。Src * (1 - Dest) + Dest * 1
 
-		kCountOfBlendMode,    //!< ブレンドモード数。指定はしない
-		kMultily = kMultiply, //!< スペルミス互換用
+		kCountOfBlendMode, //!< ブレンドモード数。指定はしない
 	};
 
 public: // サブクラス
@@ -41,7 +39,7 @@ public: // サブクラス
 	/// </summary>
 	struct ConstBufferData {
 		Vector4 color; // 色 (RGBA)
-		Matrix4x4 mat; // ３Ｄ変換行列
+		Matrix4x4Function mat; // ３Ｄ変換行列
 	};
 
 public: // 静的メンバ関数
@@ -97,7 +95,7 @@ private: // 静的メンバ変数
 	    Microsoft::WRL::ComPtr<ID3D12PipelineState>, size_t(BlendMode::kCountOfBlendMode)>
 	    sPipelineStates_;
 	// 射影行列
-	static Matrix4x4 sMatProjection_;
+	static Matrix4x4Function sMatProjection_;
 
 public: // メンバ関数
 	/// <summary>
@@ -215,7 +213,7 @@ private: // メンバ変数
 	// アンカーポイント
 	Vector2 anchorPoint_ = {0, 0};
 	// ワールド行列
-	Matrix4x4 matWorld_{};
+	Matrix4x4Function matWorld_{};
 	// 色
 	Vector4 color_ = {1, 1, 1, 1};
 	// 左右反転

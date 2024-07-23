@@ -1,9 +1,9 @@
 #include "WorldTransform.h"
-#include "myMath.h"
+#include "Matrix4x4Function.h"
 
-void WorldTransform::UpdateMatrix() {
-	// スケール、回転、平行移動を合成して行列を計算する
-	matWorld_ = MakeAffineMatrix(scale_, rotation_, translation_);
-	// 定数バッファに転送する
-	TransferMatrix();
+void WorldTransform::UpdateMatrix() 
+{
+	matWorld_ = Matrix4x4Function::MakeAffineMatrix(scale_, rotation_, translation_);
+
+	WorldTransform::TransferMatrix();
 }

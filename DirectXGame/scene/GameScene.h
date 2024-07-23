@@ -1,23 +1,24 @@
 #pragma once
-
+#include "MapChipField.h"
 #include "Audio.h"
-#include "DebugCamera.h"
 #include "DirectXCommon.h"
+#include "Skydome.h"
 #include "Input.h"
 #include "Model.h"
-#include "Player.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include <vector>
-#include"skydome.h"
-#include"MapChipField.h"
-    /// <summary>
+#include "DebugCamera.h"
+#include "Player.h"
+
+
+/// <summary>
 /// ゲームシーン
 /// </summary>
 class GameScene {
 
 public: // メンバ関数
+
 	/// <summary>
 	/// コンストクラタ
 	/// </summary>
@@ -46,35 +47,37 @@ public: // メンバ関数
 	void GenerateBlocks();
 
 private: // メンバ変数
-	DirectXCommon* dxCommon_ = nullptr;
-	Input* input_ = nullptr;
-	Audio* audio_ = nullptr;
 
+	WorldTransform worldTransform_;
+	DirectXCommon* dxCommon_ = nullptr;
+	Input* input_ = nullptr; 
+	Audio* audio_ = nullptr;
+	Model* modelBlock_ = nullptr;
+	Model* modelSkydome_ = nullptr;
+	MapChipField* mapChipField_;
+	Skydome* skydome_ = nullptr;
+	Player* player_ = nullptr;
+	Model* model_ = nullptr;
+
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
+	WorldTransform wolrldTransform_ = {};
+	ViewProjection viewProjection_ = {}; 
+	MapChipData mapChipData_ = {};
+	uint32_t numBlockVirtical_ = 0;
+	uint32_t numBlockHorizontal_ = 0;
+	uint32_t tetureHandle_ = 0;
+	
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
-	// テクスチャハンドル
-	uint32_t textureHandle_ = 0;
-	// 3Dモデル
-	Model* modelPlayer_ = nullptr;
-	Model* modelBlock_ = nullptr;
-	Model* modelSkydome_ = nullptr;
-	// ワールドトランスフォーム
-	WorldTransform worldTransform_;
-	// ビュープロジェクション
-	ViewProjection viewProjection_;
+	
+	// デバックカメラ有効
+	bool isDebugCameraActiive_ = false;
 
-	MapChipField* mapChipField_;
-
-	// 自キャラ
-	Player* player_ = nullptr;
-
-	// 縦横ブロック配列
-	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
-
-	// デバッグカメラ有効
-	bool isDebugCameraActive_ = false;
-	// デバッグカメラ
+	//デバックカメラ
 	DebugCamera* debugCamera_ = nullptr;
+
+	//デバックカメラのビュープロジェクション
+	ViewProjection* debugViewProjection_; 
 
 };

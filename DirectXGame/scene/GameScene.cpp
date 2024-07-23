@@ -61,16 +61,6 @@ void GameScene::Initialize() {
 	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
 		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
 	}
-
-	// for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
-	//	for (uint32_t j = 0; j < kNumBlockHorizontal; j++) {
-	//		worldTransformBlocks_[i][j] = new WorldTransform();
-	//		worldTransformBlocks_[i][j]->Initialize();
-	//		worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
-	//		worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
-	//	}
-	// }
-
 	modelBlock_ = Model::Create();
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
@@ -79,7 +69,7 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 	modelSkydome_ = Model::Create();
 	skydome_->Initialize(model_, &viewProjection_);
-	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	modelSkydome_ = Model::CreateFromOBJ("sphere", true);
 
 	wolrldTransform_.Initialize();
 	viewProjection_.Initialize();
@@ -166,7 +156,7 @@ void GameScene::Draw()
 	// 自キャラの描画
 	player_->Draw();
 	// 天球の描画
-	// skydome_->Draw();
+	 skydome_->Draw();
 
 	// マップチップの描画
 	for (std::vector<WorldTransform*> worldTransformBlockLine : worldTransformBlocks_) {

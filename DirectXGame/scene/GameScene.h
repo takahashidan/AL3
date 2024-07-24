@@ -10,7 +10,7 @@
 #include "WorldTransform.h"
 #include "DebugCamera.h"
 #include "Player.h"
-
+#include "CameraController.h"
 
 /// <summary>
 /// ゲームシーン
@@ -58,21 +58,22 @@ private: // メンバ変数
 	Skydome* skydome_ = nullptr;
 	Player* player_ = nullptr;
 	Model* model_ = nullptr;
+	CameraController* CameraController_ = nullptr;
 
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
-	WorldTransform wolrldTransform_ = {};
+	WorldTransform worlldTransform_ = {};
 	ViewProjection viewProjection_ = {}; 
 	MapChipData mapChipData_ = {};
 	uint32_t numBlockVirtical_ = 0;
 	uint32_t numBlockHorizontal_ = 0;
-	uint32_t tetureHandle_ = 0;
+	uint32_t textureHandle_ = 0;
 	
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
 	
 	// デバックカメラ有効
-	bool isDebugCameraActiive_ = false;
+	bool isDebugCameraActive_ = false;
 
 	//デバックカメラ
 	DebugCamera* debugCamera_ = nullptr;

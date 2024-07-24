@@ -31,7 +31,7 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	tetureHandle_ = TextureManager::Load("sample.png");
+	textureHandle_ = TextureManager::Load("sample.png");
 
 	// 3Dモデルの生成
 	//	model_ = Model::Create();
@@ -71,7 +71,7 @@ void GameScene::Initialize() {
 	skydome_->Initialize(model_, &viewProjection_);
 	modelSkydome_ = Model::CreateFromOBJ("sphere", true);
 
-	wolrldTransform_.Initialize();
+	worlldTransform_.Initialize();
 	viewProjection_.Initialize();
 
 	// カメラの位置の調整
@@ -83,6 +83,22 @@ void GameScene::Initialize() {
 	debugCamera_ = new DebugCamera(1280, 720);
 
 	 GenerateBlocks();
+
+	// カメラコントローラの初期化
+	CameraController_ = new CameraController; 
+	CameraController_->Initialize();         
+	CameraController_->SetTarget(player_);    
+	CameraController_->Reset();               
+
+	// 出力範囲の初期化
+	Rect setter = {
+	    35.5,  
+	    160.5,
+	    20.0, 
+	    25.0,  
+	};
+
+	CameraController_->SetMovableArea(setter);
 }
 
 void GameScene::Update() {
@@ -102,21 +118,22 @@ void GameScene::Update() {
 
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_P)) {
-		isDebugCameraActiive_ = true;
+		isDebugCameraActive_ = true;
 	}
 #endif
 
 	debugCamera_->Update();
 
-	if (isDebugCameraActiive_) {
+	if (isDebugCameraActive_) {
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
 		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	} else {
-		// ビュープロジェクション行列の更新と転送
-		//viewProjection_.UpdateMatrix();
-		// ビュープロジェクション行列の転送
+		CameraController_->Update();
+		viewProjection_.matView = CameraController_->GetViewProjection().matView;
+		viewProjection_.matProjection = CameraController_->GetViewProjection().matProjection;
+
 		viewProjection_.TransferMatrix();
 	}
 

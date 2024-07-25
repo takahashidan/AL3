@@ -16,7 +16,7 @@ public:
 	Player();
 	~Player();
 
-	WorldTransform& GetWorldTrnsform();
+	WorldTransform& GetWorldTransform();
 
 	/// <summary>
 	/// 初期化処理

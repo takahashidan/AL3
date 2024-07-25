@@ -12,7 +12,7 @@ Player::Player() {}
 
 Player::~Player() {}
 
-WorldTransform& Player::GetWorldTrnsform() {
+WorldTransform& Player::GetWorldTransform() {
 	// TODO: return ステートメントをここに挿入します
 	//Vector3 worldPosition = {};
 	//worldPosition.x = worldTransfrom_.translation_.x;

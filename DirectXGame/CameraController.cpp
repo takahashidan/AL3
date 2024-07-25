@@ -11,7 +11,7 @@ void CameraController::Initialize()
 void CameraController::Update() 
 {
 	// 追跡と賞のワールドトランスフォームを参照
-	const WorldTransform& targetWorldTransform = target_->GetWorldTrnsform();
+	const WorldTransform& targetWorldTransform = target_->GetWorldTransform();
 	// 追跡対象とオフセットからカメラの目標座標を計算
 	cameraTargetCoordinates .x = targetWorldTransform.translation_.x + targetOffset_.x;
 	cameraTargetCoordinates .y = targetWorldTransform.translation_.y + targetOffset_.y;
@@ -34,7 +34,7 @@ void CameraController::Update()
 void CameraController::Reset() 
 {
 	// 追跡対象のワールドトランスフォームを参照
-	const WorldTransform& targetWorldTrnsform = target_->GetWorldTrnsform();
+	const WorldTransform& targetWorldTrnsform = target_->GetWorldTransform();
 
 	// 追跡対象とオフセットからカメラの座標を計算
 	viewProjection_.translation_.x = targetWorldTrnsform.translation_.x + targetOffset_.x;

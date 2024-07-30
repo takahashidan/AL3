@@ -1,17 +1,13 @@
-#pragma once
+﻿#pragma once
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "MapChipField.h"
+#include "Rect.h"
 
 //前方宣言
 class Player;
 
 // 短形
-struct Rect {
-	float left = 0.0f;   //左端
-	float rigth = 1.0f;  //右端
-	float bottom = 0.0f; //下端
-	float top = 1.0f;    //上端
-};
 
 class CameraController
 {
@@ -54,22 +50,22 @@ private:
 	WorldTransform* worldTransform_;
 	Player* target_ = nullptr;
 
-	// 追跡対象とカメラの座標の差(オフセット)
 	Vector3 targetOffset_ = {0, 0, -50.0f};
 
-	// カメラ移動範囲
 	Rect movableArea_ = 
 	{
-		0,    //左端
-		100, //右端
-		0,    //下端
-		1000  //上端
+		0,    
+		100, 
+		0,    
+		1000  
 	};
 
-	// カメラの目標座標
 	Vector3 cameraTargetCoordinates;
-	//座上補間割合
 	static inline const float kInterpolationRate = 0.8f;
+
+	static inline const float kVelocityBias = 1.2f;
+	static inline const Rect Margin = {0, 0, 0, 0};
+
 
 };
 

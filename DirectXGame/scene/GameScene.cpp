@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Skydome.h"
 #include "TextureManager.h"
+#include "CameraController.h"
 #include <cassert>
 
 GameScene::GameScene() {}
@@ -20,32 +21,36 @@ GameScene::~GameScene() {
 	delete skydome_;
 	delete debugCamera_;
 	delete player_;
+	//delete enemy_;
 }
 
 void GameScene::Initialize() {
 
-	// int height = 720;
-	// int width = 1280;
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+	tetureHandle_ = TextureManager::Load("sample.png");
 
-	textureHandle_ = TextureManager::Load("sample.png");
 
 	// 3Dモデルの生成
-	//	model_ = Model::Create();
 	model_ = Model::CreateFromOBJ("player", true);
-
-	worldTransform_.Initialize();
-
 	// 自キャラの生成
 	player_ = new Player();
-	// 座標をマップトップ番号で指定
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 18);
+	// 敵キャラの生成
+	//マップチップを使うので呼び出す
+	modelBlock_ = Model::Create();
+	mapChipField_ = new MapChipField;
+	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1,18);
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(10, 18);
 	// 自キャラの初期化
-
 	player_->Initialize(model_, &viewProjection_, playerPosition);
+
+	player_->SetMapChipField(mapChipField_);
+
+
+	worldTransform_.Initialize();
 
 	const uint32_t kNumBlockVirtical = 20;
 	const uint32_t kNumBlockHorizontal = 100;
@@ -53,25 +58,19 @@ void GameScene::Initialize() {
 	numBlockVirtical_ = 20;
 	numBlockHorizontal_ = 100;
 
-	// const float kBlockWidth = 2.0f;
-	// const float kBlockHeight = 2.0f;
-
 	worldTransformBlocks_.resize(kNumBlockVirtical);
 
 	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
 		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
 	}
-	modelBlock_ = Model::Create();
-	mapChipField_ = new MapChipField;
-	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 
 	// スカイドームの初期化
 	skydome_ = new Skydome();
 	modelSkydome_ = Model::Create();
 	skydome_->Initialize(model_, &viewProjection_);
-	modelSkydome_ = Model::CreateFromOBJ("sphere", true);
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
-	worlldTransform_.Initialize();
+	wolrldTransform_.Initialize();
 	viewProjection_.Initialize();
 
 	// カメラの位置の調整
@@ -84,21 +83,25 @@ void GameScene::Initialize() {
 
 	 GenerateBlocks();
 
+
 	// カメラコントローラの初期化
 	CameraController_ = new CameraController; 
 	CameraController_->Initialize();         
 	CameraController_->SetTarget(player_);    
 	CameraController_->Reset();               
 
-	// 出力範囲の初期化
-	Rect setter = {
-	    35.5,  
-	    160.5,
-	    20.0, 
-	    25.0,  
-	};
+	//カメラの出力範囲の初期化
+	Rect setter = 
+	{
+		35.5,  
+		160.5,   
+		19.5, 	 
+		19.0	 
+	}; 
 
 	CameraController_->SetMovableArea(setter);
+
+
 }
 
 void GameScene::Update() {
@@ -118,22 +121,25 @@ void GameScene::Update() {
 
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_SPACE)) {
-		isDebugCameraActive_ = true;
+		isDebugCameraActiive_ = true;
 	}
 #endif
 
 	debugCamera_->Update();
 
-	if (isDebugCameraActive_) {
+	if (isDebugCameraActiive_) {
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
 		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	} else {
+		// ビュープロジェクション行列の更新と転送
+		//viewProjection_.UpdateMatrix();
+
 		CameraController_->Update();
 		viewProjection_.matView = CameraController_->GetViewProjection().matView;
 		viewProjection_.matProjection = CameraController_->GetViewProjection().matProjection;
-
+		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	}
 
@@ -173,7 +179,7 @@ void GameScene::Draw()
 	// 自キャラの描画
 	player_->Draw();
 	// 天球の描画
-	 skydome_->Draw();
+	// skydome_->Draw();
 
 	// マップチップの描画
 	for (std::vector<WorldTransform*> worldTransformBlockLine : worldTransformBlocks_) {
@@ -219,6 +225,7 @@ void GameScene::GenerateBlocks() {
 	{
 		for (uint32_t y = 0; numBlockHorizontal > y;y++)
 		{
+
 			if (mapChipField_->GetMapChipTypeByIndex(y, x) == MapChipType::kBlock)
 			{
 				WorldTransform* worldTransform = new WorldTransform();

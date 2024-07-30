@@ -1,9 +1,10 @@
 ﻿#pragma once
-#include <string>
+
+#include "WorldTransform.h"
 #include <Vector3.h>
+#include <string>
 #include <vector>
-
-
+#include "Rect.h"
 
 /// <sumary>
 /// マップチップフィールド
@@ -14,37 +15,37 @@ enum class MapChipType {
 	kBlock, // ブロック
 };
 
-struct  MapChipData 
-{
+struct MapChipData {
 	std::vector<std::vector<MapChipType>> deta;
-
 };
 
-class MapChipField 
-{
+struct IndexSet {
+	uint32_t xIndex;
+	uint32_t yIndex;
+};
+
+class MapChipField {
 public:
-
 	void ResetMapChipData();
-	uint32_t GetNumBlockVirtical() const;
+	uint32_t GetNumBlockVirtical();
 
-	uint32_t GetNumBlockHorizontal() const;
-
+	uint32_t GetNumBlockHorizontal();
 
 	void LoadMapChipCsv(const std::string& filePath);
 	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);
 	Vector3 GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex);
-
-
-	MapChipData mapChipData_;
+	IndexSet GetMapChipIndexSetByPoition(const Vector3& position);
+	Rect GetRectByIndex(uint32_t xIndex, uint32_t yIndex);
 
 private:
-	//1ブロックのサイズ
+	// 1ブロックのサイズ
 	static inline const float kBlockWidth = 2.0f;
 	static inline const float kBlockHeight = 2.0f;
 
-	//ブロックの個数
+	// ブロックの個数
 	static inline const uint32_t kNumBlockVirtical = 20;
 	static inline const uint32_t kNumBlockHorizontal = 100;
 
+	MapChipData mapChipData_;
+	WorldTransform worldTransformBlocks_;
 };
-

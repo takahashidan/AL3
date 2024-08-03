@@ -9,8 +9,6 @@ void Skydome::Initialize(Model* model, ViewProjection* viewProjection) {
 
 
 	viewProjection_ = viewProjection;
-
-	
 }
 
 Skydome::Skydome() {}

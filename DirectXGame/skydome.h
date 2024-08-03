@@ -7,23 +7,14 @@ class Skydome
 {
 public:
 
-	/// <summary>
-	/// 初期化
-	/// </summary>
 	void Initialize(Model* model, ViewProjection* viewProjection);
 	
 	Skydome();
 
 	~Skydome();
 
-	/// <summary>
-	/// 毎フレーム処理
-	/// </summary>
 	void Update();
 
-	/// <summary>
-	/// 描画
-	/// </summary>
 	void Draw();
 
 	private:

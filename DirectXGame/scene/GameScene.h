@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "CameraController.h"
+#include <cassert>
 
 
 /// <summary>
@@ -19,7 +20,7 @@
 /// </summary>
 class GameScene {
 
-public: // メンバ関数
+public: 
 
 	/// <summary>
 	/// コンストクラタ
@@ -30,6 +31,8 @@ public: // メンバ関数
 	/// デストラクタ
 	/// </summary>
 	~GameScene();
+
+	void ChecAllCollisiions();
 
 	/// <summary>
 	/// 初期化
@@ -47,8 +50,9 @@ public: // メンバ関数
 	void Draw();
 
 	void GenerateBlocks();
+	bool IsCollision(AABB aabb1, AABB aabb2);
 
-private: // メンバ変数
+private: 
 
 	WorldTransform worldTransform_;
 	DirectXCommon* dxCommon_ = nullptr;
@@ -72,17 +76,16 @@ private: // メンバ変数
 	uint32_t numBlockHorizontal_ = 0;
 	uint32_t tetureHandle_ = 0;
 	
+	std::list<Enemy*> enemies_;
+
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
 	
-	// デバックカメラ有効
 	bool isDebugCameraActiive_ = false;
 
-	//デバックカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
-	//デバックカメラのビュープロジェクション
 	ViewProjection* debugViewProjection_; 
 
 };

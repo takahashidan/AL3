@@ -1,10 +1,13 @@
 ﻿#pragma once
 #include "Model.h"
 #include "WorldTransform.h"
+#include "AABB.h"
+//#include <GetWorldPosition.h>
 
 class MapChipField;
+class Enemy;
+class GetWorldPosition;
 
-// 左右
 enum class LRDirection
 {
 	kRight,
@@ -15,17 +18,18 @@ enum Corner {
 	kRightBottom, 
 	kLeftBottom,  
 	kRightTop,    
-	kLeftTop,     
+	kLeftTop,   
+
 	kNumCorner 
 };
 
-// マップとの当たり判定情報
 struct CollisionMapInfo {
 	bool CeilingCollisionFlag = false; 
 	bool LandingFlag = false;          
 	bool WallContactFlag = false;      
 	Vector3 moveMent;                  
 };
+
 
 class Player 
 {
@@ -46,7 +50,7 @@ public:
 	// マップ衝突判定
 	void MapCollisionDetection(CollisionMapInfo& info);
 
-	void CollisonMapTop(CollisionMapInfo& info); 
+	void CollisonMapTop(CollisionMapInfo& info);
 	void CollisonMapBottom(CollisionMapInfo& info); 
 	void CollisonMaplight(CollisionMapInfo& info);
 	void CollisonMapLeft(CollisionMapInfo& info);
@@ -56,19 +60,18 @@ public:
 	void SwitchingState(CollisionMapInfo& info);
 	void attachedWallCeiling(const CollisionMapInfo& info);
 
-	/// <summary>
-	/// 初期化処理
-	/// </summary>
+	
+
+	AABB GetAABB();
+	
+	Vector3 GetWorldPosition();
+
+	void OnCollision(const Enemy* enemy);
+
 	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
 
-	/// <summary>
-	/// 更新処理
-	/// </summary>
 	void Update();
 
-	/// <summary>
-	/// 描画処理
-	/// </summary>
 	void Draw();
 
 private:
@@ -107,4 +110,7 @@ private:
 
 	static inline const float kAttenuationLanding = 1.0f;
 	static inline const float kAttenuationWall = 1.0f;
+
+
+	
 };

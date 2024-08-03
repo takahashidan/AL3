@@ -10,6 +10,8 @@
 #include <cassert>
 #include <numbers>
 
+
+
 Player::Player() {}
 
 Player::~Player() {}
@@ -44,6 +46,7 @@ void Player::SwitchingState(CollisionMapInfo& info) {
 			onGround_ = false;
 		}
 
+		// 左右移動操作
 		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
 			Vector3 acceleration = {};
 
@@ -68,10 +71,12 @@ void Player::SwitchingState(CollisionMapInfo& info) {
 				}
 			}
 
+			// 右移動中の左入力
 			if (velocity_.x < 0.0f) {
 				velocity_.x *= (1.0f - kAcceleraion);
 			}
 
+			// 旋回制御
 			if (turnTimer_ > 0.0f) {
 				turnTimer_ = turnTimer_ - 1.0f / 60.0f;
 
@@ -90,10 +95,12 @@ void Player::SwitchingState(CollisionMapInfo& info) {
 			velocity_ += Vector3(0, kJumpAcceleration, 0);
 		}
 	}
+	// 空中
 	else {
 		velocity_ += Vector3(0, -kGravityAcceleration, 0);
 	}
 
+	// 地面との当たり判定
 	if (velocity_.y < 0) {
 		if (worldTransform_.translation_.y <= 2.0f) {
 			info.LandingFlag = true;
@@ -134,21 +141,16 @@ void Player::MapCollisionDetection(CollisionMapInfo& info)
 
 void Player::Update() {
 
-	// ②.1移動情報初期化
 	CollisionMapInfo collisionMapInfo;
 
-	// 移動量に速度の値をコピー
 	collisionMapInfo.moveMent = velocity_;
 
-	// マップ衝突チェック
 	MapCollisionDetection(collisionMapInfo);
 
 
 	Move(collisionMapInfo);
 	SwitchingState(collisionMapInfo);
-	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
-	// 行列計算
 	worldTransform_.UpdateMatrix();
 }
 
@@ -158,15 +160,14 @@ void Player::CollisonMapTop(CollisionMapInfo& info) {
 	for (uint32_t i = 0; i < positionsNew.size(); ++i) {
 		positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.moveMent, static_cast<Corner>(i));
 	}
+
 	if (info.moveMent.y <= 0) {
 		return;
 	}
 
 	MapChipType mapChpiType;
-	// 真上の当たり判定を行う
 	bool hit = false;
 
-	// 左上点の判定
 	IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPoition(positionsNew[kLeftTop]);
 	mapChpiType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
@@ -174,7 +175,6 @@ void Player::CollisonMapTop(CollisionMapInfo& info) {
 	{
 		hit = true;
 	}
-	// 右上点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPoition(positionsNew[kRightTop]);
 	mapChpiType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChpiType == MapChipType::kBlock)
@@ -203,11 +203,9 @@ void Player::CollisonMapBottom(CollisionMapInfo& info)
 	}
 
 	MapChipType mapChpiType;
-	// 真下の当たり判定を行う
 	bool hit = false;
 
 	
-	// 左下点の判定
 	IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPoition(positionsNew[kLeftBottom]);
 	mapChpiType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
@@ -215,7 +213,6 @@ void Player::CollisonMapBottom(CollisionMapInfo& info)
 	{
 		hit = true;
 	}
-	// 右下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPoition(positionsNew[kRightBottom]);
 	mapChpiType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChpiType == MapChipType::kBlock) 
@@ -229,7 +226,6 @@ void Player::CollisonMapBottom(CollisionMapInfo& info)
 	}
 
 	if (hit) {
-		// めり込みを排除する方向に移動量を設定する
 		indexSet = mapChipField_->GetMapChipIndexSetByPoition
 			({
 				worldTransform_.translation_.x, 
@@ -261,37 +257,29 @@ void Player::CollisonMaplight(CollisionMapInfo& info)
 	}
 
 	MapChipType mapChpiType;
-	// 右の当たり判定を行う
 	bool hit = false;
 
-	// 右上点の判定
 	IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPoition(positionsNew[kRightTop]);
 	mapChpiType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChpiType == MapChipType::kBlock) {
 		hit = true;
 	}
-	// 右下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPoition(positionsNew[kRightBottom]);
 	mapChpiType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChpiType == MapChipType::kBlock) {
 		hit = true;
 	}
 
-	// ブロックにヒット?
 	if (hit) {
-		// めり込みを排除する方向に移動量を設定する
 		indexSet = mapChipField_->GetMapChipIndexSetByPoition({worldTransform_.translation_.x + info.moveMent.x, worldTransform_.translation_.y, worldTransform_.translation_.z});
-		// めり込み先ブロックの範囲短形
 		Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
 		info.moveMent.x = std::max(0.0f, rect.left - (worldTransform_.translation_.x + kWidth / 2));
-		// 壁に当たったことを記録する.
 		info.WallContactFlag = true;
 	}
 	
 }
 
-// ②.左方向衝突判定
 void Player::CollisonMapLeft(CollisionMapInfo& info) 
 {
 	std::array<Vector3, kNumCorner> positionsNew;
@@ -300,23 +288,19 @@ void Player::CollisonMapLeft(CollisionMapInfo& info)
 		positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.moveMent, static_cast<Corner>(i));
 	}
 
-	// 左移動あり?
 	if (info.moveMent.x >= 0) {
 		return;
 	}
 
 	MapChipType mapChpiType;
-	// 左の当たり判定を行う
 	bool hit = false;
 
-	// 左上点の判定
 	IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPoition(positionsNew[kLeftTop]);
 	mapChpiType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChpiType == MapChipType::kBlock) {
 		hit = true;
 	}
-	// 左下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPoition(positionsNew[kLeftBottom]);
 	mapChpiType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChpiType == MapChipType::kBlock) {
@@ -335,7 +319,6 @@ void Player::CollisonMapLeft(CollisionMapInfo& info)
 
 void Player::Move(const CollisionMapInfo& info) 
 {
-	//移動
 	worldTransform_.translation_ += info.moveMent;
 }
 
@@ -353,5 +336,46 @@ void Player::attachedWallCeiling(const CollisionMapInfo& info)
 		velocity_.x *= (1.0f - kAttenuationWall);
 	}
 }
+Vector3 Player::GetWorldPosition() { 
+	Vector3 worldPos;
+	
+	
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+	return worldPos;
+}
+
+
+void Player::OnCollision(const Enemy* enemy) {
+	(void)enemy;
+	velocity_ += Vector3(0, 1.0f, 0);
+	
+}
+
+
 
 void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_, textureHandle_); }
+
+
+
+AABB Player::GetAABB() {
+
+	Vector3 worldPos = GetWorldPosition();
+	AABB aabb;
+
+	aabb.min =
+	{
+		worldPos.x - kWidth / 2.0f,
+		worldPos.y - kHeigth / 2.0f,
+		worldPos.z - kWidth / 2.0f
+	};
+	
+	aabb.max =
+	{ worldPos.x + kWidth / 2.0f,
+	  worldPos.y + kHeigth / 2.0f,
+	  worldPos.z + kWidth / 2.0f,
+	};
+
+	return aabb;
+}

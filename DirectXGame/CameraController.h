@@ -4,10 +4,8 @@
 #include "MapChipField.h"
 #include "Rect.h"
 
-//前方宣言
 class Player;
 
-// 短形
 
 class CameraController
 {
@@ -24,23 +22,13 @@ public:
 		return {t * a.x + (1.0f - t) * b.x, t * a.y + (1.0f - t) * b.z, t * a.z + (1.0f - t) * b.z}; 
 	}
 
-	/// <summary>
-	/// ビュープロジェクションを取得
-	/// </summary>
-	/// <returns>ビュープロジェクション</returns>
 	const ViewProjection& GetViewProjection() { return viewProjection_; }
 
 
-	/// <summary>
-	/// 毎フレーム処理
-	/// </summary>
 	void Update();
 	void SetMovableArea(Rect area) { movableArea_ = area; }
 
 
-	/// <summary>
-	/// 描画
-	/// </summary>
 	void Draw();
 
 

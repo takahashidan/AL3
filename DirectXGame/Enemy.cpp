@@ -5,15 +5,23 @@
 #include <algorithm>
 #include <cassert>
 #include <numbers>
+#include "Player.h"
+
 
 Enemy::Enemy() {}
 
 Enemy::~Enemy() {}
 
+void Enemy::OnCollision(const Player* player) 
+{
+	(void)player; 
+}
+
 void Enemy::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
 	assert(model);
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
+
 	velocity_ = 
 	{
 	    -kWalkSpeed,
@@ -35,7 +43,6 @@ void Enemy::Update() {
 
 	worldTransform_.rotation_.x = std::sin(std::numbers::pi_v<float> * 2.0f * walkTimer_ / kWalkMotionTime);
 
-	// 回転アニメーション
 	float param = std::sin(2 * velocity_.x / velocity_.x);
 	float radian = 
 		kWalkMotionAngleStart + kWalkMotionAngleEnd
@@ -53,3 +60,27 @@ void Enemy::Draw()
 	model_->Draw(worldTransform_, *viewProjection_); 
 }
 
+AABB Enemy::GetAABB() {
+	Vector3 worldPos = GetWorldPosition();
+	AABB aabb;
+
+	aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeigth / 2.0f, worldPos.z - kWidth / 2.0f};
+
+	aabb.max = {
+	    worldPos.x + kWidth / 2.0f,
+	    worldPos.y + kHeigth / 2.0f,
+	    worldPos.z + kWidth / 2.0f,
+	};
+
+	return aabb;
+}
+
+Vector3 Enemy::GetWorldPosition() 
+{ 
+	Vector3 worldPos;
+
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+	return worldPos;
+}

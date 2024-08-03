@@ -1,34 +1,31 @@
 ﻿#pragma once
 #include "Model.h"
 #include "WorldTransform.h"
+#include <AABB.h>
 
 class MapChipField;
+class Player;
 
-/// <summary>
-/// 敵
-/// </summary>
+
 class Enemy 
 {
 public:
-	
+
 	Enemy();
 	~Enemy();
 
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
+	void OnCollision(const Player* player);
 
-	/// <summary>
-	/// 初期化処理
-	/// </summary>
+
+	AABB GetAABB();
+
+	Vector3 GetWorldPosition();
+
 	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
 
-	/// <summary>
-	/// 更新処理
-	/// </summary>
 	void Update();
 
-	/// <summary>
-	/// 描画処理
-	/// </summary>
 	void Draw();
 
 private:
@@ -50,6 +47,9 @@ private:
 	static inline const float kWalkMotionAngleEnd = 90.0f;
 	static inline const float kWalkMotionTime = 3.0f;
 	float walkTimer_ = 0.0f;
+
+	static inline const float kWidth = 1.6f;
+	static inline const float kHeigth = 1.6f;
 
 
 };

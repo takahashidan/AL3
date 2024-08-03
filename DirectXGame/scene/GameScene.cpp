@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "Matrix4x4Function.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Skydome.h"
 #include "TextureManager.h"
 #include "CameraController.h"
@@ -21,11 +22,13 @@ GameScene::~GameScene() {
 	delete skydome_;
 	delete debugCamera_;
 	delete player_;
-	//delete enemy_;
+	delete enemy_;
 }
 
 void GameScene::Initialize() {
 
+	// int height = 720;
+	// int width = 1280;
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
@@ -33,22 +36,33 @@ void GameScene::Initialize() {
 	tetureHandle_ = TextureManager::Load("sample.png");
 
 
-	// 3Dモデルの生成
+	// 3Dモデルの生成(プレイヤー)
 	model_ = Model::CreateFromOBJ("player", true);
+	// 3Dモデルの生成(敵)
+	enmeyModel_ = Model::CreateFromOBJ("enemy", true);
 	// 自キャラの生成
 	player_ = new Player();
 	// 敵キャラの生成
+	enemy_  = new Enemy();
+
 	//マップチップを使うので呼び出す
 	modelBlock_ = Model::Create();
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
+	// プレイヤーの初期位置
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1,18);
+	// 敵の初期位置
 	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(10, 18);
+	
 	// 自キャラの初期化
 	player_->Initialize(model_, &viewProjection_, playerPosition);
 
 	player_->SetMapChipField(mapChipField_);
 
+	//敵キャラの初期化
+	enemy_->Initialize(enmeyModel_, &viewProjection_, enemyPosition);
+
+	enemy_->SetMapChipField(mapChipField_);
 
 	worldTransform_.Initialize();
 
@@ -66,9 +80,8 @@ void GameScene::Initialize() {
 
 	// スカイドームの初期化
 	skydome_ = new Skydome();
-	modelSkydome_ = Model::Create();
-	skydome_->Initialize(model_, &viewProjection_);
-	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	modelSkydome_ = Model::CreateFromOBJ("sphere", true);
+	skydome_->Initialize(modelSkydome_, &viewProjection_);
 
 	wolrldTransform_.Initialize();
 	viewProjection_.Initialize();
@@ -86,14 +99,13 @@ void GameScene::Initialize() {
 
 	// カメラコントローラの初期化
 	CameraController_ = new CameraController; 
-	CameraController_->Initialize();         
+	CameraController_->Initialize();          
 	CameraController_->SetTarget(player_);    
-	CameraController_->Reset();               
+	CameraController_->Reset();              
 
-	//カメラの出力範囲の初期化
 	Rect setter = 
 	{
-		35.5,  
+		35.5,    
 		160.5,   
 		19.5, 	 
 		19.0	 
@@ -106,8 +118,8 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 	skydome_->Update();
-	// 自キャラの更新
 	player_->Update();
+	enemy_->Update();
 
 	for (std::vector<WorldTransform*> worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -120,7 +132,7 @@ void GameScene::Update() {
 	}
 
 #ifdef _DEBUG
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_P)) {
 		isDebugCameraActiive_ = true;
 	}
 #endif
@@ -130,16 +142,12 @@ void GameScene::Update() {
 	if (isDebugCameraActiive_) {
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	} else {
-		// ビュープロジェクション行列の更新と転送
-		//viewProjection_.UpdateMatrix();
 
 		CameraController_->Update();
 		viewProjection_.matView = CameraController_->GetViewProjection().matView;
 		viewProjection_.matProjection = CameraController_->GetViewProjection().matProjection;
-		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	}
 
@@ -178,8 +186,10 @@ void GameScene::Draw()
 
 	// 自キャラの描画
 	player_->Draw();
+	// 敵キャラの描画
+	enemy_->Draw();
 	// 天球の描画
-	// skydome_->Draw();
+	skydome_->Draw();
 
 	// マップチップの描画
 	for (std::vector<WorldTransform*> worldTransformBlockLine : worldTransformBlocks_) {

@@ -15,7 +15,6 @@ namespace
 
 void MapChipField::ResetMapChipData()
 {
-	//	MapChipData* mapChipData_ = new MapChipData();
 	mapChipData_.deta.clear();
 	mapChipData_.deta.resize(kNumBlockVirtical);
 	for (std::vector<MapChipType>& mapChipDataLine : mapChipData_.deta) {
@@ -32,12 +31,9 @@ void MapChipField::LoadMapChipCsv(const std::string& filePath)
 	file.open(filePath);
 	assert(file.is_open());
 
-	// マップチップCSV
 	std::stringstream mapChipCsv;
 
-	// ファイルの内容を文字列ストリームにコピー
 	mapChipCsv << file.rdbuf();
-	// ファイルを閉じる
 	file.close();
 
 	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) 
@@ -94,7 +90,6 @@ IndexSet MapChipField::GetMapChipIndexSetByPoition(const Vector3& position)
 
 Rect MapChipField::GetRectByIndex(uint32_t xIndex, uint32_t yIndex) 
 {
-	// 指定ブロックの中心座標を取得する
 	Vector3 center = GetMapChipPositionByIndex(xIndex, yIndex);
 
 	Rect rect;

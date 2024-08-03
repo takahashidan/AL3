@@ -14,9 +14,8 @@ enum class LRDirection
 enum Corner {
 	kRightBottom, 
 	kLeftBottom,  
-	kRightTop, 
-	kLeftTop,
-
+	kRightTop,    
+	kLeftTop,     
 	kNumCorner 
 };
 
@@ -25,7 +24,7 @@ struct CollisionMapInfo {
 	bool CeilingCollisionFlag = false; 
 	bool LandingFlag = false;          
 	bool WallContactFlag = false;      
-	Vector3 moveMent; 
+	Vector3 moveMent;                  
 };
 
 class Player 
@@ -49,7 +48,7 @@ public:
 
 	void CollisonMapTop(CollisionMapInfo& info); 
 	void CollisonMapBottom(CollisionMapInfo& info); 
-	void CollisonMapLight(CollisionMapInfo& info);
+	void CollisonMaplight(CollisionMapInfo& info);
 	void CollisonMapLeft(CollisionMapInfo& info);
 
 	void Move(const CollisionMapInfo& info);
@@ -73,54 +72,39 @@ public:
 	void Draw();
 
 private:
-	// マップチップによるフィールド
 	MapChipField* mapChipField_ = nullptr;
 
-	// ワールド変換データ
 	WorldTransform worldTransform_;
 
-	// モデル
 	Model* model_ = nullptr;
 
-	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 
-	// ビュープロジェクション
 	ViewProjection* viewProjection_ = nullptr;
 
 	LRDirection lrDirection_ = LRDirection::kLeft;
 
-	static inline const float kAcceleraion = 0.5f;
-	static inline const float kLimitRunSpeed = 0.5f;
+	static inline const float kAcceleraion = 0.3f;
+	static inline const float kLimitRunSpeed = 0.3f;
 	Vector3 velocity_ = {};
 
-	// 旋回開始時の角度
 	float turnFirstRotationY_ = 0.0f;
-	// 旋回タイマー
 	float turnTimer_ = 0.0f;
-	// 旋回時間<秒>
 	static inline const float kTimeTurn = 0.3f;
 
-	// 接地状態フラグ
 	bool onGround_ = true;
 
-	//重力加速度(下方向)
 	static inline const float kGravityAcceleration = 0.2f;
-	// 最大落下速度(下方向)
 	static inline const float kLimitFallSpeed = 1.0f;
-	// ジャンプ速度(上方向)
-	static inline const float kJumpAcceleration = 2.0f;
+	static inline const float kJumpAcceleration = 1.0f;
 
 	const Vector3& GetVelocity() const { return velocity_; }
 
-	// キャラキターの当たり判定サイズ
 	static inline const float kWidth = 1.6f;
-	static inline const float kHeight = 1.6f;
+	static inline const float kHeigth = 1.6f;
 	
 	static inline const float kBlank = 0.1f;
 
-	// 着地時の速度減衰率
 	static inline const float kAttenuationLanding = 1.0f;
-	// 着地時の速度減衰率
 	static inline const float kAttenuationWall = 1.0f;
 };

@@ -10,9 +10,6 @@ void Skydome::Initialize(Model* model, ViewProjection* viewProjection) {
 
 	viewProjection_ = viewProjection;
 
-	//model_ = Model::Create();
-	//worldTransform_ = new WorldTransform; 
-	//viewProjection_ = new ViewProjection;
 	
 }
 

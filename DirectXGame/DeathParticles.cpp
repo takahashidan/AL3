@@ -9,7 +9,6 @@
 
 void DeathParticles::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
 	assert(model);
-	//ワールド変換の初期化
 	for (auto& worldTransform : worldTransforms_)
 	{
 		worldTransform.Initialize();
@@ -19,7 +18,6 @@ void DeathParticles::Initialize(Model* model, ViewProjection* viewProjection, co
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
 	model_ = model;
 
-	// 引数の内容をメンバ変数に記録
 	viewProjection_ = viewProjection;
 
 	objectColor_.Initialize();
@@ -29,7 +27,6 @@ void DeathParticles::Initialize(Model* model, ViewProjection* viewProjection, co
 
 void DeathParticles::Update() 
 {
-	// ワールド変換の更新
 	for (auto& worldTransform : worldTransforms_) {
 		worldTransform.UpdateMatrix();
 	}
@@ -43,14 +40,11 @@ void DeathParticles::Update()
 		worldTransforms_[i].translation_ += velocity;
 	}
 
-	 //カウンターを1フレーム分の秒数進める
 	counter_ += 1.0f / 60.0f;
 
-	// 存続時間上限に達したら
 	if (counter_ >= kDuration)
 	{
 		counter_ = kDuration;
-		// 終了扱いにする
 		isFinished_ = true;
 	}
 	
@@ -66,16 +60,10 @@ void DeathParticles::Update()
 
 void DeathParticles::Draw() 
 { 
-	// モデルの描画
 	for (auto& worldTransform : worldTransforms_) 
 	{
-		//model_->Draw(worldTransform, *viewProjection_, textureHandle_);
 	
 		model_->Draw(worldTransform, *viewProjection_, &objectColor_);
 	}
 
-	//if (isFinished_) 
-	//{
-	//	return;
-	//}
 }

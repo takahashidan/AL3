@@ -1,14 +1,10 @@
-﻿#pragma once
+#pragma once
 
 #include "WorldTransform.h"
 #include <Vector3.h>
 #include <string>
 #include <vector>
 #include "Rect.h"
-
-/// <sumary>
-/// マップチップフィールド
-/// <sumary>
 
 enum class MapChipType {
 	kBlank, // 空白

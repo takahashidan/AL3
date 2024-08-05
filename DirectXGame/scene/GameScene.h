@@ -21,39 +21,23 @@
 /// </summary>
 class GameScene {
 
-public: // メンバ関数
+public: 
 
-	/// <summary>
-	/// コンストクラタ
-	/// </summary>
 	GameScene();
 
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
 	~GameScene();
 
 	void ChecAllCollisiions();
-
-	/// <summary>
-	/// 初期化
-	/// </summary>
 	void Initialize();
 
-	/// <summary>
-	/// 毎フレーム処理
-	/// </summary>
 	void Update();
 
-	/// <summary>
-	/// 描画
-	/// </summary>
 	void Draw();
 
 	void GenerateBlocks();
 	bool IsCollision(AABB aabb1, AABB aabb2);
 
-private: // メンバ変数
+private: 
 
 	WorldTransform worldTransform_;
 	DirectXCommon* dxCommon_ = nullptr;
@@ -79,21 +63,14 @@ private: // メンバ変数
 	
 	std::list<Enemy*> enemies_;
 
-	/// <summary>
-	/// ゲームシーン用
-	/// </summary>
 	
-	// デバックカメラ有効
 	bool isDebugCameraActiive_ = false;
 
-	//デバックカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
-	//デバックカメラのビュープロジェクション
 	ViewProjection* debugViewProjection_; 
 
 	DeathParticles* deathParticles_ ;
-	//デスパーティクルが存在するか
 	bool deathParticlesFlag = false;
 
 };

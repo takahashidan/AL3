@@ -38,25 +38,18 @@ GameScene::~GameScene()
 
 void GameScene::ChecAllCollisiions()
 {
-	// 衝突対象1と2の座標
 	AABB aabb1, aabb2;
 
-	// 自キャラの座標
 	aabb1 = player_->GetAABB();
 
-	// 自キャラと敵全ての当たり判定
 	for (Enemy* enemy : enemies_)
 	{
-		//敵弾の座標
 		aabb2 = enemy->GetAABB();
 		
-		// AABB同士の交差判定
 		if (IsCollision(aabb1, aabb2))
 		{
 
-			// 自キャラの衝突時コールバックを呼び出す
 			player_->OnCollision(enemy);
-			// 敵弾の衝突時コールバックを呼び出す
 			enemy_->OnCollision(player_);
 		}
 	}
@@ -65,8 +58,6 @@ void GameScene::ChecAllCollisiions()
 
 void GameScene::Initialize() {
 
-	// int height = 720;
-	// int width = 1280;
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
@@ -74,35 +65,24 @@ void GameScene::Initialize() {
 	tetureHandle_ = TextureManager::Load("sample.png");
 
 
-	// 3Dモデルの生成(プレイヤー)
 	model_ = Model::CreateFromOBJ("player", true);
-	// 3Dモデルの生成(敵)
 	enmeyModel_ = Model::CreateFromOBJ("enemy", true);
-	// 自キャラの生成
 	player_ = new Player();
-	// 敵キャラの生成
 	enemy_  = new Enemy();
-
-	//マップチップを使うので呼び出す
 	modelBlock_ = Model::Create();
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
-	// プレイヤーの初期位置
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1,18);
-	// 敵の初期位置
 	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(10, 18);
 	
-	// 自キャラの初期化
 	player_->Initialize(model_, &viewProjection_, playerPosition);
 
 	player_->SetMapChipField(mapChipField_);
 
-	//敵キャラの初期化
 	enemy_->Initialize(enmeyModel_, &viewProjection_, enemyPosition);
 
 	enemy_->SetMapChipField(mapChipField_);
 
-	// 敵の生成
 	for (int32_t i = 1; i < 4; ++i)
 	{
 		Enemy* newEnemy = new Enemy();
@@ -131,33 +111,25 @@ void GameScene::Initialize() {
 		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
 	}
 
-	// スカイドームの初期化
 	skydome_ = new Skydome();
-//	modelSkydome_ = Model::Create();
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
 
 	wolrldTransform_.Initialize();
 	viewProjection_.Initialize();
-
-	// カメラの位置の調整
 	viewProjection_.translation_.y = 10;
 	viewProjection_.translation_.x = 20;
-
-	// mapChipData_ = {};
 
 	debugCamera_ = new DebugCamera(1280, 720);
 
 	 GenerateBlocks();
 
 
-	// カメラコントローラの初期化
 	CameraController_ = new CameraController; // 生成
 	CameraController_->Initialize();          // 初期化
 	CameraController_->SetTarget(player_);    // 追跡対象をリセット
 	CameraController_->Reset();               // リセット(瞬間合わせ)
 
-	//カメラの出力範囲の初期化
 	Rect setter = 
 	{
 		35.5,    //左端
@@ -184,13 +156,6 @@ void GameScene::Update() {
 		kenemise_->Update();
 	}
 
-	//for (DeathParticles* deathParticlesHati : deathParticles_) 
-	//{
-	//	if (deathParticlesFlag) 
-	//	{
-	//		deathParticlesHati->Update();
-	//	}
-	//}
 
 	deathParticles_->Update();
 
@@ -218,16 +183,12 @@ void GameScene::Update() {
 	if (isDebugCameraActiive_) {
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	} else {
-		// ビュープロジェクション行列の更新と転送
-		//viewProjection_.UpdateMatrix();
 
 		CameraController_->Update();
 		viewProjection_.matView = CameraController_->GetViewProjection().matView;
 		viewProjection_.matProjection = CameraController_->GetViewProjection().matProjection;
-		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	}
 

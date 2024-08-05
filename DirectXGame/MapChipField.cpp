@@ -1,4 +1,4 @@
-﻿#include "MapChipField.h"
+#include "MapChipField.h"
 #include <cassert>
 #include <fstream>
 #include <map>
@@ -15,7 +15,6 @@ namespace
 
 void MapChipField::ResetMapChipData()
 {
-	//	MapChipData* mapChipData_ = new MapChipData();
 	mapChipData_.deta.clear();
 	mapChipData_.deta.resize(kNumBlockVirtical);
 	for (std::vector<MapChipType>& mapChipDataLine : mapChipData_.deta) {
@@ -32,12 +31,9 @@ void MapChipField::LoadMapChipCsv(const std::string& filePath)
 	file.open(filePath);
 	assert(file.is_open());
 
-	// マップチップCSV
 	std::stringstream mapChipCsv;
 
-	// ファイルの内容を文字列ストリームにコピー
 	mapChipCsv << file.rdbuf();
-	// ファイルを閉じる
 	file.close();
 
 	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) 

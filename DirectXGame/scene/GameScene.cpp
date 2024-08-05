@@ -112,7 +112,7 @@ void GameScene::Initialize() {
 	}
 
 	skydome_ = new Skydome();
-	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	modelSkydome_ = Model::CreateFromOBJ("sphere", true);
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
 
 	wolrldTransform_.Initialize();

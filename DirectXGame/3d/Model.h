@@ -3,6 +3,7 @@
 #include "LightGroup.h"
 #include "Material.h"
 #include "Mesh.h"
+#include "ObjectColor.h"
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -15,6 +16,22 @@ class WorldTransform;
 /// </summary>
 class ModelCommon {
 public:
+	// パイプラインセットの番号
+	enum PipelineSetIndex {
+		PipelineSetFill,      // 塗りつぶし
+		PipelineSetWireFrame, // ワイヤーフレーム
+
+		PipelineSetSize,
+	};
+
+	// パイプラインセット
+	struct PipelineSet {
+		// ルートシグネチャ
+		Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;
+		// パイプラインステートオブジェクト
+		Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState_;
+	};
+
 	static ModelCommon* GetInstance();
 	static void Terminate();
 
@@ -33,14 +50,14 @@ public:
 	/// </summary>
 	/// <param name="worldTransform">ワールドトランスフォーム</param>
 	/// <param name="viewProjection">ビュープロジェクション</param>
-	void TransformCommand(
-	    const WorldTransform& worldTransform, const ViewProjection& viewProjection);
+	void TransformCommand(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 描画前処理
 	/// </summary>
 	/// <param name="commandList">コマンドリスト</param>
-	void PreDraw(ID3D12GraphicsCommandList* commandList);
+	/// <param name="pipelineSetIndex">パイプラインセットの番号</param>
+	void PreDraw(ID3D12GraphicsCommandList* commandList, uint32_t pipelineSetIndex = ModelCommon::PipelineSetFill);
 
 	/// <summary>
 	/// 描画後処理
@@ -51,6 +68,7 @@ public:
 	/// getter
 	/// </summary>
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList_; }
+	ObjectColor* GetObjectColor() const { return defaultObjectColor_.get(); }
 
 private:
 	ModelCommon() = default;
@@ -61,7 +79,12 @@ private:
 	/// <summary>
 	/// グラフィックスパイプラインの初期化
 	/// </summary>
-	void InitializeGraphicsPipeline();
+	void InitializeGraphicsPipelines();
+
+	/// <summary>
+	/// グラフィックスパイプラインの初期化
+	/// </summary>
+	PipelineSet InitializeGraphicsPipeline(uint32_t pipelineSetIndex);
 
 	// シングルトンインスタンス
 	static ModelCommon* sInstance_;
@@ -70,12 +93,12 @@ private:
 	UINT descriptorHandleIncrementSize_ = 0u;
 	// コマンドリスト
 	ID3D12GraphicsCommandList* commandList_ = nullptr;
-	// ルートシグネチャ
-	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;
-	// パイプラインステートオブジェクト
-	Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState_;
+	// パイプラインセット
+	std::array<PipelineSet, PipelineSetSize> pipelineSets;
 	// デフォルトライト
 	std::unique_ptr<LightGroup> defaultLightGroup_;
+	// デフォルトオブジェクトα
+	std::unique_ptr<ObjectColor> defaultObjectColor_;
 };
 
 /// <summary>
@@ -92,6 +115,7 @@ public: // 列挙子
 		kMaterial,       // マテリアル
 		kTexture,        // テクスチャ
 		kLight,          // ライト
+		kObjectColor,    // オブジェクトアルファ
 	};
 
 private:
@@ -135,7 +159,8 @@ public: // 静的メンバ関数
 	/// 描画前処理
 	/// </summary>
 	/// <param name="commandList">描画コマンドリスト</param>
-	static void PreDraw(ID3D12GraphicsCommandList* commandList);
+	/// <param name="pipelineSetIndex">パイプラインセットの番号</param>
+	static void PreDraw(ID3D12GraphicsCommandList* commandList, uint32_t pipelineSetIndex = ModelCommon::PipelineSetFill);
 
 	/// <summary>
 	/// 描画後処理
@@ -143,14 +168,13 @@ public: // 静的メンバ関数
 	static void PostDraw();
 
 public: // メンバ関数
-	~Model() = default;
-
 	/// <summary>
 	/// 描画
 	/// </summary>
 	/// <param name="worldTransform">ワールドトランスフォーム</param>
 	/// <param name="viewProjection">ビュープロジェクション</param>
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
+	/// <param name="objectColor">オブジェクトカラー</param>
+	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const ObjectColor* objectColor = nullptr);
 
 	/// <summary>
 	/// 描画（テクスチャ差し替え）
@@ -158,9 +182,8 @@ public: // メンバ関数
 	/// <param name="worldTransform">ワールドトランスフォーム</param>
 	/// <param name="viewProjection">ビュープロジェクション</param>
 	/// <param name="textureHadle">テクスチャハンドル</param>
-	void Draw(
-	    const WorldTransform& worldTransform, const ViewProjection& viewProjection,
-	    uint32_t textureHadle);
+	/// <param name="objectColor">オブジェクトカラー</param>
+	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, uint32_t textureHadle, const ObjectColor* objectColor = nullptr);
 
 	/// <summary>
 	/// メッシュコンテナを取得
@@ -205,15 +228,15 @@ private: // メンバ関数
 	/// </summary>
 	/// /// <param name="vertices">頂点配列</param>
 	/// <param name="indices">インデックス配列</param>
-	void InitializeFromVertices(
-	    const std::vector<Mesh::VertexPosNormalUv>& vertices, const std::vector<uint32_t>& indices);
+	void InitializeFromVertices(const std::vector<Mesh::VertexPosNormalUv>& vertices, const std::vector<uint32_t>& indices);
 
 	/// <summary>
 	/// モデル読み込み
 	/// </summary>
 	/// <param name="modelname">モデル名</param>
+	/// <param name="subDirectory">サブディレクトリ名</param>
 	/// <param name="modelname">エッジ平滑化フラグ</param>
-	void LoadModel(const std::string& modelname, bool smoothing);
+	void LoadModel(const std::string& modelname, const std::string& subDirectory, bool smoothing);
 
 	/// <summary>
 	/// マテリアル読み込み
@@ -228,5 +251,5 @@ private: // メンバ関数
 	/// <summary>
 	/// テクスチャ読み込み
 	/// </summary>
-	void LoadTextures();
+	void LoadTextures(const std::string& subDirectory);
 };

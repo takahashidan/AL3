@@ -6,10 +6,7 @@ void Skydome::Initialize(Model* model, ViewProjection* viewProjection) {
 	worldTransform_.Initialize();
 	
 	model_ = model;
-
-
-	viewProjection_ = viewProjection;
-	
+	viewProjection_ = viewProjection;	
 }
 
 Skydome::Skydome() {}

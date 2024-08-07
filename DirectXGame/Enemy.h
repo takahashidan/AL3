@@ -45,13 +45,11 @@ private:
 	Vector3 velocity_ = {};
 
 	static inline const float kWalkMotionAngleStart = 0.0f;
-
 	static inline const float kWalkMotionAngleEnd = 90.0f;
-
 	static inline const float kWalkMotionTime = 3.0f;
-
 	float walkTimer_ = 0.0f;
 
+	// キャラキターの当たり判定サイズ
 	static inline const float kWidth = 1.6f;
 	static inline const float kHeigth = 1.6f;
 

@@ -60,6 +60,7 @@ public: // メンバ関数
 	void GenerateBlocks();
 	bool IsCollision(AABB aabb1, AABB aabb2);
 
+	// デスフラグのgetter
 	bool IsFinished() const { return finished_; }
 
 private: // メンバ変数
@@ -92,17 +93,22 @@ private: // メンバ変数
 	/// ゲームシーン用
 	/// </summary>
 	
+	// デバックカメラ有効
 	bool isDebugCameraActiive_ = false;
 
+	//デバックカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
+	//デバックカメラのビュープロジェクション
 	ViewProjection* debugViewProjection_; 
 
 	DeathParticles* deathParticles_ ;
+	//デスパーティクルが存在するか
 	bool deathParticlesFlag = false;
 
 	Phase phase_;
 
+	//終了フラグ
 	bool finished_ = false;
 	
 };

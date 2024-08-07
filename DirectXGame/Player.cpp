@@ -40,6 +40,7 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 }
 
 void Player::SwitchingState(CollisionMapInfo& info) {
+
 	if (onGround_) {
 		if (velocity_.y > 0.0f ||info.LandingFlag == false ) {
 			onGround_ = false;
@@ -72,7 +73,6 @@ void Player::SwitchingState(CollisionMapInfo& info) {
 			if (velocity_.x < 0.0f) {
 				velocity_.x *= (1.0f - kAcceleraion);
 			}
-
 			if (turnTimer_ > 0.0f) {
 				turnTimer_ = turnTimer_ - 1.0f / 60.0f;
 
@@ -94,6 +94,7 @@ void Player::SwitchingState(CollisionMapInfo& info) {
 	else {
 		velocity_ += Vector3(0, -kGravityAcceleration, 0);
 	}
+
 	if (velocity_.y < 0) {
 		if (worldTransform_.translation_.y <= 2.0f) {
 			info.LandingFlag = true;
@@ -112,12 +113,11 @@ void Player::SwitchingState(CollisionMapInfo& info) {
 			float fallDistance = rect.top - playerBottom;
 			info.moveMent.y = std::min(0.0f, fallDistance);
 			velocity_.x *= (1.0f - kAcceleraion);
-			
 			velocity_.y = 0.0f;
-			
 			onGround_ = true;
 		}
 	}
+
 	
 }
 
@@ -306,6 +306,7 @@ void Player::CollisonMapLeft(CollisionMapInfo& info)
 		info.WallContactFlag = true;
 	}
 
+	
 }
 
 void Player::Move(const CollisionMapInfo& info) 
@@ -327,7 +328,7 @@ void Player::attachedWallCeiling(const CollisionMapInfo& info)
 		velocity_.x *= (1.0f - kAttenuationWall);
 	}
 }
-Vector3 Player::GetWorldPosition() {
+Vector3 Player::GetWorldPosition() { 
 	Vector3 worldPos;
 	
 	

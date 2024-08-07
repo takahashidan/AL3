@@ -22,8 +22,12 @@ enum class Scene
 Scene scene = Scene::kUnkown;
 TitleScene* titleScene = nullptr;
 GameScene* gameScene = nullptr;
+Model* model_ = nullptr;
+WorldTransform* wolrldTransform_ = {};
+ViewProjection* viewProjection_ = {}; 
+MapChipField* mapChipField_ = nullptr;
 
-// キー入力結果を受け取る箱
+    // キー入力結果を受け取る箱
 char keys[256] = {0};
 char preKeys[256] = {0};
 
@@ -31,9 +35,12 @@ void ChangeScene() {
 	switch (scene) {
 	case Scene::kTitle:
 		if (titleScene->IsFinished()) {
+			// シーン変更
 			scene = Scene::kGame;
+			// 旧Sceneの解放
 			delete titleScene;
 			titleScene = nullptr;
+			// 新Sceneの生成と初期化
 			gameScene = new GameScene;
 			gameScene->Initialize();
 		}
@@ -41,9 +48,12 @@ void ChangeScene() {
 	case Scene::kGame:
 		if (gameScene->IsFinished())
 		{
+			// シーン変更
 			scene = Scene::kTitle;
+			// 旧シーンの解放
 			delete gameScene;
 			gameScene = nullptr;
+			// 新シーンの生成と初期化
 			titleScene = new TitleScene();
 			titleScene->Initialize();
 		}
@@ -141,7 +151,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 
 
+	// メインループ
 	while (true) {
+		// メッセージ処理
 		if (win->ProcessMessage()) {
 			break;
 		}
@@ -157,6 +169,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//gameScene->Update();
 			// 軸表示の更新
 			axisIndicator->Update();
+			// タイトルの更新
+			//titleScene->Update(keys, preKeys);
+			// 現在Sceneの更新
 			UpdateScene();
 			//   シーン切り替え
 			ChangeScene();
@@ -189,6 +204,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			gameScene->Update();
 			// 軸表示の更新
 			axisIndicator->Update();
+			// タイトルの更新
+			// titleScene->Update(keys, preKeys);
+			// 現在Sceneの更新
 			UpdateScene();
 			// シーン切り替え
 			ChangeScene();
@@ -198,8 +216,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			// 描画開始
 			dxCommon->PreDraw();
 			// タイトルの描画
+			// titleScene->Draw();
 			// 現在シーンの描画
 			DrawScene();
+			// ゲームシーンの描画
+			//gameScene->Draw();
 			// 軸表示の描画
 			axisIndicator->Draw();
 			// プリミティブ描画のリセット

@@ -9,7 +9,7 @@
 
 bool DeathParticles::IsFinished() const 
 { 
-	 return isFinished_; 
+	 return isFinished_;
 }
 
 void DeathParticles::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
@@ -65,6 +65,7 @@ void DeathParticles::Update()
 
 void DeathParticles::Draw() 
 { 
+	// モデルの描画
 	for (auto& worldTransform : worldTransforms_) 
 	{
 		model_->Draw(worldTransform, *viewProjection_, &objectColor_);

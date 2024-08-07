@@ -10,7 +10,6 @@ class Player;
 class CameraController
 {
 public:
-
 	void Initialize();
 	void SetTarget(Player* target) { target_ = target; }
 	void Reset();
@@ -23,8 +22,8 @@ public:
 
 
 	void Update();
-
 	void SetMovableArea(Rect area) { movableArea_ = area; }
+
 
 	void Draw();
 
@@ -37,6 +36,7 @@ private:
 
 	Vector3 targetOffset_ = {0, 0, -50.0f};
 
+	// カメラ移動範囲
 	Rect movableArea_ = 
 	{
 		0,    //左端
@@ -46,11 +46,9 @@ private:
 	};
 
 	Vector3 cameraTargetCoordinates;
-
 	static inline const float kInterpolationRate = 0.8f;
-
 	static inline const float kVelocityBias = 1.2f;
-
 	static inline const Rect Margin = {0, 0, 0, 0};
+
 };
 

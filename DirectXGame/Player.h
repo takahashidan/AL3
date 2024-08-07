@@ -19,14 +19,14 @@ enum Corner {
 	kRightTop,    // 右上
 	kLeftTop,     // 左上
 
-	kNumCorner
+	kNumCorner 
 };
 
 struct CollisionMapInfo {
-	bool CeilingCollisionFlag = false; // 天井衝突
-	bool LandingFlag = false;          // 着地
-	bool WallContactFlag = false;      // 壁接触
-	Vector3 moveMent;                  // 移動量
+	bool CeilingCollisionFlag = false; 
+	bool LandingFlag = false;          
+	bool WallContactFlag = false;      
+	Vector3 moveMent;                  
 };
 
 
@@ -92,16 +92,14 @@ private:
 	Vector3 velocity_ = {};
 
 	float turnFirstRotationY_ = 0.0f;
-
 	float turnTimer_ = 0.0f;
-
 	static inline const float kTimeTurn = 0.3f;
 
 	bool onGround_ = true;
 
-	static inline const float kGravityAcceleration = 0.2f;
-	static inline const float kLimitFallSpeed = 1.0f;
-	static inline const float kJumpAcceleration = 1.0f;
+	static inline const float kGravityAcceleration = 0.1f;
+	static inline const float kLimitFallSpeed = 0.01f;
+	static inline const float kJumpAcceleration = 1.5f;
 
 	const Vector3& GetVelocity() const { return velocity_; }
 

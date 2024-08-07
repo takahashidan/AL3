@@ -44,4 +44,3 @@ private:
 	ObjectColor objectColor_;
 	Vector4 color_;
 };
-

@@ -83,7 +83,6 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 	tetureHandle_ = TextureManager::Load("sample.png");
 
-
 	model_ = Model::CreateFromOBJ("player", true);
 	enmeyModel_ = Model::CreateFromOBJ("enemy", true);
 	player_ = new Player();
@@ -131,7 +130,6 @@ void GameScene::Initialize() {
 		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
 	}
 
-	// スカイドームの初期化
 	skydome_ = new Skydome();
 	modelSkydome_ = Model::CreateFromOBJ("sphere", true);
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
@@ -148,10 +146,10 @@ void GameScene::Initialize() {
 	 GenerateBlocks();
 
 
-	CameraController_ = new CameraController; 
-	CameraController_->Initialize();          
-	CameraController_->SetTarget(player_);    
-	CameraController_->Reset();               
+	CameraController_ = new CameraController; // 生成
+	CameraController_->Initialize();          // 初期化
+	CameraController_->SetTarget(player_);    // 追跡対象をリセット
+	CameraController_->Reset();               // リセット
 
 	Rect setter = 
 	{
@@ -229,7 +227,6 @@ void GameScene::Update() {
 		break;
 	case Phase::kDeath:
 
-		// 敵キャラの更新
 		enemy_->Update();
 		for (Enemy* kenemise_ : enemies_) {
 			kenemise_->Update();
@@ -253,7 +250,6 @@ void GameScene::Update() {
 
 void GameScene::Draw() {
 
-	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 	switch (phase_) {
 	case Phase::kPlay:
@@ -263,10 +259,6 @@ void GameScene::Draw() {
 #pragma region 背景スプライト描画
 		// 背景スプライト描画前処理
 		Sprite::PreDraw(commandList);
-
-		/// <summary>
-		/// ここに背景スプライトの描画処理を追加できる
-		/// </summary>
 
 		// スプライト描画後処理
 		Sprite::PostDraw();
@@ -282,18 +274,14 @@ void GameScene::Draw() {
 		/// ここに3Dオブジェクトの描画処理を追加できる
 		/// </summary>
 
-		// 自キャラの描画
 		player_->Draw();
-		// 敵キャラの描画
 		enemy_->Draw();
 		for (Enemy* kenemise_ : enemies_)
 		{
 			kenemise_->Draw();
 		}
-		// 天球の描画
 		skydome_->Draw();
 
-		// マップチップの描画
 		for (std::vector<WorldTransform*> worldTransformBlockLine : worldTransformBlocks_) {
 			for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 				if (!worldTransformBlock)

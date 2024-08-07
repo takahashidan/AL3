@@ -1,4 +1,5 @@
 #pragma once
+
 struct Rect {
 	float left;   // 左端
 	float right;  // 右端

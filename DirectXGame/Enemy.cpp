@@ -22,7 +22,6 @@ void Enemy::Initialize(Model* model, ViewProjection* viewProjection, const Vecto
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 
-	// 速度を設定する
 	velocity_ = 
 	{
 	    -kWalkSpeed,

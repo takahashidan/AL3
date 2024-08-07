@@ -2,7 +2,6 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include "AABB.h"
-//#include <GetWorldPosition.h>
 
 class MapChipField;
 class Enemy;
@@ -20,13 +19,13 @@ enum Corner {
 	kRightTop,    // 右上
 	kLeftTop,     // 左上
 
-	kNumCorner // 要素数
+	kNumCorner
 };
 
 struct CollisionMapInfo {
-	bool CeilingCollisionFlag = false; // 天井衝突フラグ
-	bool LandingFlag = false;          // 着地フラグ
-	bool WallContactFlag = false;      // 壁接触フラグ
+	bool CeilingCollisionFlag = false; // 天井衝突
+	bool LandingFlag = false;          // 着地
+	bool WallContactFlag = false;      // 壁接触
 	Vector3 moveMent;                  // 移動量
 };
 
@@ -45,6 +44,8 @@ public:
 		mapChipField_ = mapChipField; 
 	}
 
+
+
 	Vector3 CornerPosition(const Vector3& center, Corner corner);
 
 	void MapCollisionDetection(CollisionMapInfo& info);
@@ -59,13 +60,13 @@ public:
 	void SwitchingState(CollisionMapInfo& info);
 	void attachedWallCeiling(const CollisionMapInfo& info);
 
-	
+
 	AABB GetAABB();
 	
 	Vector3 GetWorldPosition();
 
 	void OnCollision(const Enemy* enemy);
-
+	bool IsDead() const { return isDeed_; }
 
 	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
 
@@ -91,7 +92,9 @@ private:
 	Vector3 velocity_ = {};
 
 	float turnFirstRotationY_ = 0.0f;
+
 	float turnTimer_ = 0.0f;
+
 	static inline const float kTimeTurn = 0.3f;
 
 	bool onGround_ = true;
@@ -110,6 +113,7 @@ private:
 	static inline const float kAttenuationLanding = 1.0f;
 	static inline const float kAttenuationWall = 1.0f;
 
+	bool isDeed_ = false;
 
 	
 };

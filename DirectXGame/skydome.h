@@ -12,6 +12,7 @@ public:
 	Skydome();
 
 	~Skydome();
+
 	void Update();
 
 	void Draw();

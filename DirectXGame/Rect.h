@@ -1,6 +1,4 @@
 #pragma once
-
-// 範囲短形
 struct Rect {
 	float left;   // 左端
 	float right;  // 右端

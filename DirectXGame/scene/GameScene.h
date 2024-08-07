@@ -15,29 +15,54 @@
 #include <cassert>
 #include "DeathParticles.h"
 
+enum class Phase
+{
+	kPlay,
+	kDeath,
+};
 
 /// <summary>
 /// ゲームシーン
 /// </summary>
 class GameScene {
 
-public: 
+public: // メンバ関数
 
+	void ChangePhase();
+
+	/// <summary>
+	/// コンストクラタ
+	/// </summary>
 	GameScene();
 
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~GameScene();
 
 	void ChecAllCollisiions();
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
 
+	/// <summary>
+	/// 毎フレーム処理
+	/// </summary>
 	void Update();
 
+	/// <summary>
+	/// 描画
+	/// </summary>
 	void Draw();
 
 	void GenerateBlocks();
 	bool IsCollision(AABB aabb1, AABB aabb2);
 
-private: 
+	bool IsFinished() const { return finished_; }
+
+private: // メンバ変数
 
 	WorldTransform worldTransform_;
 	DirectXCommon* dxCommon_ = nullptr;
@@ -63,6 +88,9 @@ private:
 	
 	std::list<Enemy*> enemies_;
 
+	/// <summary>
+	/// ゲームシーン用
+	/// </summary>
 	
 	bool isDebugCameraActiive_ = false;
 
@@ -73,4 +101,8 @@ private:
 	DeathParticles* deathParticles_ ;
 	bool deathParticlesFlag = false;
 
+	Phase phase_;
+
+	bool finished_ = false;
+	
 };

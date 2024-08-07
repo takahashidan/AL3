@@ -67,7 +67,6 @@ MapChipType MapChipField::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex
 		return MapChipType::kBlank;
 	}
 
-	// mapChipData_.deta.resize(kNumBlockVirtical);
 	return mapChipData_.deta[yIndex][xIndex];
 }
 
@@ -91,7 +90,6 @@ IndexSet MapChipField::GetMapChipIndexSetByPoition(const Vector3& position)
 
 Rect MapChipField::GetRectByIndex(uint32_t xIndex, uint32_t yIndex) 
 {
-	// 指定ブロックの中心座標を取得する
 	Vector3 center = GetMapChipPositionByIndex(xIndex, yIndex);
 
 	Rect rect;

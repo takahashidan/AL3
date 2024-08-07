@@ -40,7 +40,6 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 }
 
 void Player::SwitchingState(CollisionMapInfo& info) {
-
 	if (onGround_) {
 		if (velocity_.y > 0.0f ||info.LandingFlag == false ) {
 			onGround_ = false;
@@ -95,7 +94,6 @@ void Player::SwitchingState(CollisionMapInfo& info) {
 	else {
 		velocity_ += Vector3(0, -kGravityAcceleration, 0);
 	}
-
 	if (velocity_.y < 0) {
 		if (worldTransform_.translation_.y <= 2.0f) {
 			info.LandingFlag = true;
@@ -120,7 +118,6 @@ void Player::SwitchingState(CollisionMapInfo& info) {
 			onGround_ = true;
 		}
 	}
-
 	
 }
 
@@ -309,7 +306,6 @@ void Player::CollisonMapLeft(CollisionMapInfo& info)
 		info.WallContactFlag = true;
 	}
 
-	
 }
 
 void Player::Move(const CollisionMapInfo& info) 
@@ -331,7 +327,7 @@ void Player::attachedWallCeiling(const CollisionMapInfo& info)
 		velocity_.x *= (1.0f - kAttenuationWall);
 	}
 }
-Vector3 Player::GetWorldPosition() { // ワールド座標を入れる変数
+Vector3 Player::GetWorldPosition() {
 	Vector3 worldPos;
 	
 	
@@ -345,7 +341,7 @@ Vector3 Player::GetWorldPosition() { // ワールド座標を入れる変数
 void Player::OnCollision(const Enemy* enemy) {
 	(void)enemy;
 	velocity_ += Vector3(0, 1.0f, 0);
-	
+	isDeed_ = true;
 }
 
 

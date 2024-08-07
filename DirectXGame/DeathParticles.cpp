@@ -7,6 +7,11 @@
 
 
 
+bool DeathParticles::IsFinished() const 
+{ 
+	 return isFinished_; 
+}
+
 void DeathParticles::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
 	assert(model);
 	for (auto& worldTransform : worldTransforms_)
@@ -62,8 +67,11 @@ void DeathParticles::Draw()
 { 
 	for (auto& worldTransform : worldTransforms_) 
 	{
-	
 		model_->Draw(worldTransform, *viewProjection_, &objectColor_);
 	}
 
+	if (isFinished_) 
+	{
+		return;
+	}
 }

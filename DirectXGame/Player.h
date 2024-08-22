@@ -103,8 +103,14 @@ private:
 
 	const Vector3& GetVelocity() const { return velocity_; }
 
+<<<<<<< Updated upstream
 	static inline const float kWidth = 1.6f;
 	static inline const float kHeigth = 1.6f;
+=======
+	// キャラキターの当たり判定サイズ
+	static inline const float kWidth = 1.0f;
+	static inline const float kHeight = 1.0f;
+>>>>>>> Stashed changes
 	
 	static inline const float kBlank = 0.1f;
 
